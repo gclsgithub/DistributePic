@@ -1,1 +1,2 @@
-# DistributePic
+# 开发工具
+*  Android Studio
