@@ -12,7 +12,7 @@
         android:layout_height="178dp"
         android:layout_marginStart="109dp"
         android:layout_marginLeft="109dp"
-        android:layout_marginTop="221dp"
+        android:layout_marginTop="120dp"
         android:layout_marginEnd="110dp"
         android:layout_marginRight="110dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="88dp"
         android:layout_marginLeft="88dp"
-        android:layout_marginTop="460dp"
+        android:layout_marginTop="380dp"
         android:layout_marginBottom="400dp"
         android:text="相机"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,7 +39,7 @@
         android:id="@+id/myAlbum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="460dp"
+        android:layout_marginTop="380dp"
         android:layout_marginEnd="88dp"
         android:layout_marginRight="88dp"
         android:layout_marginBottom="400dp"
@@ -48,4 +48,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.181" />
+
+    <Button
+        android:id="@+id/doProcess"
+        android:layout_width="161dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="125dp"
+        android:layout_marginLeft="125dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="125dp"
+        android:layout_marginRight="125dp"
+        android:layout_marginBottom="167dp"
+        android:text="识别处理"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/takePicture" />
 </androidx.constraintlayout.widget.ConstraintLayout>
