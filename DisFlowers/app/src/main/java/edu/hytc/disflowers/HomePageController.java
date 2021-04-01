@@ -1,20 +1,37 @@
 package edu.hytc.disflowers;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class HomePageController extends AppCompatActivity {
 
     protected static final int REQUEST_IMAGE_CAPTURE = 1;
 
+
+    static final int REQUEST_TAKE_PHOTO = 1;
+
+
     protected static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 0;
+
+    String currentPhotoPath;
 
     private Bitmap bitmap;
 
@@ -52,7 +69,44 @@ public class HomePageController extends AppCompatActivity {
 
         //设置监听事件 -- 显示相册
         myAlbum.setOnClickListener(this::showAblum);
+    }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
     }
 
     private void processPicAndMove2Result(View view){
@@ -100,6 +154,15 @@ public class HomePageController extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
+        } else if (resultCode == RESULT_OK){
+            Uri uri=data.getData();
+            String[] images={MediaStore.Images.Media.DATA};//将获取到的
+            Cursor cursor=this.managedQuery(uri,images,null,null,null);
+            int index=cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String img_uri=cursor.getString(index);
+            /*显示图片*/
+            showPicture(img_uri);
         }
     }
 
@@ -108,7 +171,16 @@ public class HomePageController extends AppCompatActivity {
      * @param view
      */
     private void showAblum(View view){
+        Intent galleryIntent=new Intent(Intent.ACTION_GET_CONTENT);
+        galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        galleryIntent.setType("image/*");//图片
+        startActivityForResult(galleryIntent,1);//跳转，传递打开相册请求码
+    }
 
+
+    /*显示图片*/
+    private void showPicture(String img_uri) {
+        imageView.setImageBitmap(BitmapFactory.decodeFile(img_uri));
     }
 
 
