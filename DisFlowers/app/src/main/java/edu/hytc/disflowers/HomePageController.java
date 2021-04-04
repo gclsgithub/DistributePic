@@ -1,16 +1,19 @@
 package edu.hytc.disflowers;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -25,8 +29,12 @@ public class HomePageController extends AppCompatActivity {
 
     protected static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    protected static final int REQUEST_ABLUM_CAPTURE = 2;
+
 
     static final int REQUEST_TAKE_PHOTO = 1;
+
+    private Uri outputFileUri;
 
 
     protected static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 0;
@@ -154,15 +162,9 @@ public class HomePageController extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
-        } else if (resultCode == RESULT_OK){
-            Uri uri=data.getData();
-            String[] images={MediaStore.Images.Media.DATA};//将获取到的
-            Cursor cursor=this.managedQuery(uri,images,null,null,null);
-            int index=cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            String img_uri=cursor.getString(index);
-            /*显示图片*/
-            showPicture(img_uri);
+        } else if (requestCode == REQUEST_ABLUM_CAPTURE && resultCode == RESULT_OK){
+
+            imageView.setImageURI(data.getData());
         }
     }
 
@@ -174,14 +176,34 @@ public class HomePageController extends AppCompatActivity {
         Intent galleryIntent=new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
         galleryIntent.setType("image/*");//图片
-        startActivityForResult(galleryIntent,1);//跳转，传递打开相册请求码
+        startActivityForResult(galleryIntent,REQUEST_ABLUM_CAPTURE);//跳转，传递打开相册请求码
     }
 
 
-    /*显示图片*/
-    private void showPicture(String img_uri) {
-        imageView.setImageBitmap(BitmapFactory.decodeFile(img_uri));
+    /**
+     *
+     * android4.4以后返回的URI只有图片编号
+     * 获取图片真实路径
+     *
+     * @param contentURI
+     * @return
+     */
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
     }
+
+
+
 
 
 }
