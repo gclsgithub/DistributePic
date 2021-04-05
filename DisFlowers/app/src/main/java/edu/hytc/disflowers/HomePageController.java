@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
@@ -117,27 +119,30 @@ public class HomePageController extends AppCompatActivity {
         }
     }
 
-    private void processPicAndMove2Result(View view){
+    private void processPicAndMove2Result(View view) {
 
         //获取图片信息
-
-
         //处理图片（识别功能）
-
-
         //得到
         Intent intent = new Intent(this, DisResultController.class);
+
+
+        //调用setimage方法，得到返回值bitmap
+        Bitmap bitmap = setimage(imageView);
+        intent.putExtra("image",bitmap);
+
         startActivity(intent);
     }
 
     /**
      * 调用拍照功能
      * 　　　１.调用系统相机
-    　*　　　２.拍照好了之后回掉
-     *      ３.跳转画面
+     * 　*　　　２.拍照好了之后回掉
+     * ３.跳转画面
+     *
      * @param view
      */
-    private void takePicturefunction(View view){
+    private void takePicturefunction(View view) {
         Toast.makeText(this, "调用相机", Toast.LENGTH_SHORT).show();
         //１.调用系统相机
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -146,10 +151,18 @@ public class HomePageController extends AppCompatActivity {
         }
     }
 
+    //把图片转换成bitmap形式传递通过intent形式传递过去
+    private Bitmap setimage(ImageView view1){
+        Bitmap image = ((BitmapDrawable)view1.getDrawable()).getBitmap();
+        Bitmap bitmap1 = Bitmap.createBitmap(image);
+        return bitmap1;
+    }
+
     /**
      * 调用拍照功能
-     *      ２.拍照好了之后回掉  保存图片
-     *      ３.跳转画面
+     * ２.拍照好了之后回掉  保存图片
+     * ３.跳转画面
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -162,26 +175,26 @@ public class HomePageController extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
-        } else if (requestCode == REQUEST_ABLUM_CAPTURE && resultCode == RESULT_OK){
+        } else if (requestCode == REQUEST_ABLUM_CAPTURE && resultCode == RESULT_OK) {
 
             imageView.setImageURI(data.getData());
         }
     }
 
     /**
-     *  显示相册
+     * 显示相册
+     *
      * @param view
      */
-    private void showAblum(View view){
-        Intent galleryIntent=new Intent(Intent.ACTION_GET_CONTENT);
+    private void showAblum(View view) {
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
         galleryIntent.setType("image/*");//图片
-        startActivityForResult(galleryIntent,REQUEST_ABLUM_CAPTURE);//跳转，传递打开相册请求码
+        startActivityForResult(galleryIntent, REQUEST_ABLUM_CAPTURE);//跳转，传递打开相册请求码
     }
 
 
     /**
-     *
      * android4.4以后返回的URI只有图片编号
      * 获取图片真实路径
      *
@@ -201,9 +214,6 @@ public class HomePageController extends AppCompatActivity {
         }
         return result;
     }
-
-
-
 
 
 }
