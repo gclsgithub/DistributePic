@@ -22,10 +22,8 @@ public class DisResultController extends AppCompatActivity {
     }
 
     private void processSeeLog(View view){
-
-
         //得到
-        Intent intent = new Intent(this, HistoryList.class);
+        Intent intent = new Intent(this, HomePageController.class);
         startActivity(intent);
     }
 }
