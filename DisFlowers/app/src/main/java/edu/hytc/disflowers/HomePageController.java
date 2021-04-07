@@ -1,13 +1,10 @@
 package edu.hytc.disflowers;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -15,17 +12,18 @@ import android.provider.MediaStore;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import edu.hytc.disflowers.biz.service.MyData;
 
 public class HomePageController extends AppCompatActivity {
 
@@ -121,17 +119,19 @@ public class HomePageController extends AppCompatActivity {
 
     private void processPicAndMove2Result(View view) {
 
+        //调用setimage方法，得到返回值bitmap
+        Bitmap bitmap = setimage(imageView);
+
         //获取图片信息
         //处理图片（识别功能）
         //得到
-        Intent intent = new Intent(this, DisResultController.class);
+        Intent intent = new Intent(HomePageController.this, DisResultController.class);
 
 
-        //调用setimage方法，得到返回值bitmap
-        Bitmap bitmap = setimage(imageView);
-        intent.putExtra("image",bitmap);
 
+        MyData.data = bitmap2Bytes(bitmap);
         startActivity(intent);
+
     }
 
     /**
@@ -215,5 +215,20 @@ public class HomePageController extends AppCompatActivity {
         return result;
     }
 
+    public static String getSDPath() {
+        File sdDir = null;
+        boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+        // 判断sd卡是否存在
+        if (sdCardExist) {
+            sdDir = Environment.getExternalStorageDirectory();// 获取跟目录
+        }
+        return sdDir.toString();
+    }
+
+    private byte[] bitmap2Bytes(Bitmap bm){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
 
 }
