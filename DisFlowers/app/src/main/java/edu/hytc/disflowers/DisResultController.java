@@ -234,6 +234,7 @@ public class DisResultController extends AppCompatActivity {
 
             Message msg1 = new Message();//创建消息类
             msg1.obj=bitmap_1;//消息类对象中存入消息
+            handler1.sendMessage(msg1);//通过handler对象发送消息
 
             Message msg2 = new Message();//创建消息类
             msg2.obj=bitmap_2;//消息类对象中存入消息
