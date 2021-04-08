@@ -31,6 +31,7 @@ import edu.hytc.disflowers.biz.service.AuthUtils;
 import edu.hytc.disflowers.biz.service.GsonUtils;
 import edu.hytc.disflowers.biz.service.MyData;
 import edu.hytc.disflowers.biz.service.PlanService;
+import edu.hytc.disflowers.entity.ResultEntity;
 import edu.hytc.disflowers.util.SavePhoto;
 
 public class DisResultController extends AppCompatActivity {
@@ -103,7 +104,8 @@ public class DisResultController extends AppCompatActivity {
 
         String result = PlanService.plantData(bitmap2Bytes(bitmap1), token);
 
-        GsonUtils.fromJson(result,)
+        ResultEntity resultEntity = GsonUtils.fromJson(result, ResultEntity.class);
+
 
     }
 
