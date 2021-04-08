@@ -82,7 +82,7 @@ public class DisResultController extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         imageView3 = findViewById(R.id.imageView3);
         imageView4 = findViewById(R.id.imageView4);
-        imageView5 = findViewById(R.id.imageView4);
+        imageView5 = findViewById(R.id.imageView5);
         textView11 = findViewById(R.id.textView11);
         textView22 = findViewById(R.id.textView22);
         textView33 = findViewById(R.id.textView33);
