@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.UUID;
 
@@ -106,7 +107,16 @@ public class DisResultController extends AppCompatActivity {
 
         ResultEntity resultEntity = GsonUtils.fromJson(result, ResultEntity.class);
 
+        String name = resultEntity.getResult().getName();
 
+        String score = resultEntity.getResult().getScore();
+
+        BigDecimal bd=new BigDecimal(score);
+
+        String text = resultEntity.getResult().getBaikeInfo().getDescription();
+
+        if (bd.min(BigDecimal.of))
+        showDetail.setText(text);
     }
 
 
