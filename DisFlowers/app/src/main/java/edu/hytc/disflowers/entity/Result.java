@@ -6,12 +6,12 @@ public class Result {
 
     private String name;
 
-    private BaikeInfo baikeInfo;
+    private BaikeInfo baike_info;
 
     public Result(String score, String name, BaikeInfo baikeInfo) {
         this.score = score;
         this.name = name;
-        this.baikeInfo = baikeInfo;
+        this.baike_info = baikeInfo;
     }
 
     public String getScore() {
@@ -30,11 +30,11 @@ public class Result {
         this.name = name;
     }
 
-    public BaikeInfo getBaikeInfo() {
-        return baikeInfo;
+    public BaikeInfo getBaike_info() {
+        return baike_info;
     }
 
-    public void setBaikeInfo(BaikeInfo baikeInfo) {
-        this.baikeInfo = baikeInfo;
+    public void setBaike_info(BaikeInfo baike_info) {
+        this.baike_info = baike_info;
     }
 }

@@ -1,15 +1,17 @@
 package edu.hytc.disflowers.entity;
 
+import java.util.List;
+
 public class ResultEntity {
 
-    private Result result;
+    private List<Result> result;
     private String logId;
 
-    public Result getResult() {
+    public List<Result> getResult() {
         return result;
     }
 
-    public void setResult(Result result) {
+    public void setResult(List<Result> result) {
         this.result = result;
     }
 
@@ -21,7 +23,7 @@ public class ResultEntity {
         this.logId = logId;
     }
 
-    public ResultEntity(Result result, String logId) {
+    public ResultEntity(List<Result> result, String logId) {
         this.result = result;
         this.logId = logId;
     }
